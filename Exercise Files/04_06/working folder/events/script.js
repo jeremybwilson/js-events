@@ -1,26 +1,38 @@
-var dragndrop = (function() {
-  var myX = '';
-  var myY = '';
-  var whichArt = '';
+const dragAndDrop = (function(){
+  let myX = '';
+  let myY = '';
+  let whichArt = '';
 
-  function moveStart(e) {
-    whichArt = e.target;
-    myX = e.offsetX === undefined ? e.layerX : e.offsetX;
-    myY = e.offsetY === undefined ? e.layerY : e.offsetY;
+  function resetZ() {
+    const elements = document.querySelectorAll('img');
+    for (let i = elements.length - 1; i >= 0; i--) {
+      elements[i].style.zIndex = 5;
+    }
+  }
+
+  function moveStart(event){
+    whichArt = event.target;
+    // ternary operation for setting myX and myY values
+    myX = event.offsetX === undefined ? event.layerX : event.offsetX;
+    myY = event.offsetY === undefined ? event.layerY : event.offsetY;
+    resetZ();
     whichArt.style.zIndex = 10;
   }
 
-  function moveDragOver(e) {
-    e.preventDefault();
+  function moveDragOver(event) {
+    event.preventDefault();
   }
 
-  function moveDrop(e) {
-    e.preventDefault();
-    whichArt.style.left = e.pageX - myX + 'px';
-    whichArt.style.top = e.pageY - myY + 'px';
+  function moveDrop(event) {
+    event.preventDefault();
+    whichArt.style.left = event.pageX - myX + 'px';
+    whichArt.style.top = event.pageY - myY + 'px';
   }
 
-  document.querySelector('body').addEventListener('dragstart', moveStart, false);
-  document.querySelector('body').addEventListener('dragover', moveDragOver, false);
-  document.querySelector('body').addEventListener('drop', moveDrop, false);
+  const bodyContainer = document.querySelector('body');
+  // listen for the events 'dragstart', 'dragover', and 'drop'
+  bodyContainer.addEventListener('dragstart', moveStart, false);
+  bodyContainer.addEventListener('dragover', moveDragOver, false);
+  bodyContainer.addEventListener('drop', moveDrop, false);
+
 })();
